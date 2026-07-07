@@ -35,51 +35,52 @@ export function ChatSidebar({
 
   return (
     <>
-      {/* Mobile backdrop */}
+      {/* Mobile Backdrop Overlay */}
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-neutral-900/10 dark:bg-neutral-950/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-200"
+          className="fixed inset-0 bg-neutral-900/25 dark:bg-neutral-950/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-200 animate-fade-in"
         />
       )}
 
-      {/* Sidebar container */}
+      {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col z-45 transform lg:transform-none lg:static transition-transform duration-200 ease-in-out ${
+        className={`fixed inset-y-0 left-0 w-66 border-r border-neutral-200/80 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex flex-col z-45 transform lg:transform-none lg:static transition-transform duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Header */}
+        {/* Sidebar Header */}
         <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
-          <span className="font-semibold text-xs uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+          <span className="font-semibold text-[10px] uppercase tracking-wider text-neutral-400 dark:text-neutral-500 font-mono select-none">
             Chat History
           </span>
           <button
             onClick={onClose}
-            className="p-1 rounded text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 lg:hidden transition-colors"
+            className="p-1 rounded-md text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 lg:hidden transition-colors"
+            aria-label="Close Sidebar"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* New Chat Button */}
-        <div className="p-4">
+        {/* Action Button: New Conversation */}
+        <div className="p-4 flex-shrink-0">
           <button
             onClick={() => {
               onNewChat();
               onClose();
             }}
-            className="w-full py-2 px-4 flex items-center justify-center gap-2 border border-neutral-250 dark:border-neutral-800 rounded-md text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors text-neutral-800 dark:text-neutral-200"
+            className="w-full py-2.5 px-4 flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm font-semibold bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-250 shadow-sm hover:bg-neutral-50 dark:hover:bg-neutral-850 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-150 active:scale-[0.98]"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-4 w-4 text-indigo-500" />
             New Conversation
           </button>
         </div>
 
-        {/* Chat History List */}
-        <div className="flex-1 overflow-y-auto px-2 space-y-0.5">
+        {/* Scrollable Conversation List */}
+        <div className="flex-1 overflow-y-auto px-3 space-y-1 py-1">
           {chats.length === 0 ? (
-            <div className="p-4 text-center text-xs text-neutral-400 dark:text-neutral-500">
+            <div className="p-8 text-center text-xs text-neutral-400 dark:text-neutral-500 select-none">
               No chat history
             </div>
           ) : (
@@ -88,10 +89,10 @@ export function ChatSidebar({
               return (
                 <div
                   key={chat.id}
-                  className={`group flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors text-sm ${
+                  className={`group flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all duration-150 text-sm ${
                     isSelected
-                      ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 font-medium'
-                      : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-neutral-200'
+                      ? 'bg-white text-neutral-900 dark:bg-neutral-800/80 dark:text-neutral-100 font-semibold shadow-sm border border-neutral-200 dark:border-neutral-750'
+                      : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/50 dark:hover:bg-neutral-800/30 hover:text-neutral-900 dark:hover:text-neutral-250 border border-transparent'
                   }`}
                 >
                   <div
@@ -99,9 +100,11 @@ export function ChatSidebar({
                       onSelectChat(chat.id);
                       onClose();
                     }}
-                    className="flex items-center gap-2 flex-1 min-w-0 pr-2"
+                    className="flex items-center gap-2.5 flex-1 min-w-0 pr-2"
                   >
-                    <MessageSquare className="h-4 w-4 flex-shrink-0 opacity-70" />
+                    <MessageSquare className={`h-4 w-4 flex-shrink-0 transition-colors ${
+                      isSelected ? 'text-indigo-500' : 'opacity-60'
+                    }`} />
                     <span className="truncate">{chat.title || 'Untitled Chat'}</span>
                   </div>
                   <button
@@ -109,7 +112,7 @@ export function ChatSidebar({
                       e.stopPropagation();
                       onDeleteChat(chat.id);
                     }}
-                    className="p-1 rounded text-neutral-400 hover:text-neutral-950 dark:hover:text-neutral-200 hover:bg-neutral-200/50 dark:hover:bg-neutral-700 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                    className="p-1 rounded-md text-neutral-400 hover:text-red-650 hover:bg-red-50 dark:hover:bg-red-950/20 opacity-80 lg:opacity-0 lg:group-hover:opacity-100 focus:opacity-100 transition-all duration-150"
                     aria-label="Delete chat"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -122,33 +125,40 @@ export function ChatSidebar({
 
         {/* User profile footer */}
         {user && (
-          <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3 bg-neutral-50/30 dark:bg-neutral-900/30">
+          <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3 bg-neutral-100/50 dark:bg-neutral-900/50 flex-shrink-0">
+            
+            {/* User credentials details */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200 truncate">
+                <p className="text-sm font-bold text-neutral-800 dark:text-neutral-200 truncate">
                   {user.username}
                 </p>
-                {user.is_admin && (
-                  <span className="inline-flex items-center gap-1 text-[9px] text-neutral-500 dark:text-neutral-400 font-mono uppercase tracking-wider">
-                    <Shield className="h-2.5 w-2.5" /> Admin
+                {user.is_admin ? (
+                  <span className="inline-flex items-center gap-1 text-[8px] text-indigo-600 dark:text-indigo-400 font-mono font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30 px-1.5 py-0.5 rounded">
+                    <Shield className="h-2 w-2" /> Admin
+                  </span>
+                ) : (
+                  <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium select-none">
+                    Workspace Member
                   </span>
                 )}
               </div>
               <ThemeToggle variant="inline" />
             </div>
             
-            <div className="flex flex-col gap-1.5">
+            {/* Quick Actions */}
+            <div className="flex flex-col gap-2 pt-1 border-t border-neutral-200/60 dark:border-neutral-805/60">
               {user.is_admin && (
                 <Link
                   href="/admin"
-                  className="w-full text-center py-1.5 px-3 border border-neutral-250 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded text-xs font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className="w-full text-center py-2 px-3 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-850 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 shadow-sm transition-all duration-150 active:scale-[0.98]"
                 >
                   Admin Portal
                 </Link>
               )}
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 border border-transparent hover:border-red-200 dark:hover:border-red-900/30 transition-colors"
+                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-55 dark:hover:bg-red-950/20 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:border-red-200 dark:hover:border-red-900/30 shadow-sm transition-all duration-150 active:scale-[0.98]"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 Sign Out

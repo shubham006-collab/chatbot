@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Menu, Bot } from 'lucide-react';
+import { Send, Menu, Bot, Sparkles } from 'lucide-react';
 import { MessageBubble } from './MessageBubble';
 import { ThemeToggle } from './theme-toggle';
 
@@ -57,38 +57,50 @@ export function ChatWindow({
   return (
     <div className="flex-1 flex flex-col h-full bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden transition-colors duration-200">
       
-      {/* Mobile Header */}
-      <header className="flex items-center justify-between px-4 h-14 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 lg:hidden z-10 flex-shrink-0">
-        <div className="flex items-center">
+      {/* Sticky Premium Header (both Desktop & Mobile) */}
+      <header className="flex items-center justify-between px-6 h-14 border-b border-neutral-200/80 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md sticky top-0 z-10 flex-shrink-0 select-none">
+        <div className="flex items-center gap-2">
           <button
             onClick={onMenuClick}
-            className="p-1.5 rounded text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors mr-2"
+            className="p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 lg:hidden transition-colors mr-1"
             aria-label="Open Sidebar"
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="font-medium text-sm text-neutral-800 dark:text-neutral-200">
-            Chat Session
-          </span>
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm text-neutral-850 dark:text-neutral-150">
+              {chatId ? 'Conversation Thread' : 'New Chat Session'}
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-[9px] text-neutral-450 dark:text-neutral-500 font-mono tracking-wider uppercase font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Assistant Online
+            </span>
+          </div>
         </div>
-        <ThemeToggle variant="inline" />
+        
+        <div className="flex items-center gap-2">
+          {/* Header Action / Theme Toggle on Mobile */}
+          <div className="lg:hidden">
+            <ThemeToggle variant="inline" />
+          </div>
+        </div>
       </header>
 
-      {/* Message thread container */}
+      {/* Message Thread Container */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {loading ? (
-          <div className="h-full flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500 font-medium">
+          <div className="h-full flex items-center justify-center text-sm text-neutral-400 dark:text-neutral-500 font-medium font-mono select-none">
+            <span className="w-4 h-4 border-2 border-neutral-300 border-t-neutral-500 rounded-full animate-spin mr-2" />
             Loading conversation...
           </div>
         ) : messages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center space-y-4 px-4 text-center">
-            <div className="w-12 h-12 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500 bg-white dark:bg-neutral-900">
-              <Bot className="w-6 h-6" />
+          <div className="h-full flex flex-col items-center justify-center space-y-5 px-4 text-center select-none">
+            <div className="w-14 h-14 rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-center text-indigo-500 dark:text-indigo-400 bg-white dark:bg-neutral-900 shadow-md">
+              <Sparkles className="w-6 h-6 animate-pulse" />
             </div>
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-neutral-800 dark:text-neutral-200">New Conversation</h3>
-              <p className="text-xs text-neutral-400 dark:text-neutral-500 max-w-xs">
-                Ask a question or start a conversation with the assistant.
+            <div className="space-y-1.5">
+              <h3 className="text-base font-bold text-neutral-800 dark:text-neutral-200">How can I help you today?</h3>
+              <p className="text-xs text-neutral-400 dark:text-neutral-500 max-w-sm leading-relaxed">
+                Start a conversation to draft messages, analyze code, brainstorm designs, or solve complex equations.
               </p>
             </div>
           </div>
@@ -100,11 +112,14 @@ export function ChatWindow({
             
             {/* Pulsing loading dots */}
             {sending && (
-              <div className="flex justify-start mb-4">
-                <div className="bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/50 rounded-lg px-4 py-3 text-sm flex items-center space-x-1.5">
-                  <div className="w-1.5 h-1.5 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-1.5 h-1.5 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-1.5 h-1.5 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="flex justify-start items-start gap-3 mb-6">
+                <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-tr from-indigo-500 to-violet-500 text-white border border-transparent shadow-sm">
+                  <Bot className="h-4.5 w-4.5" />
+                </div>
+                <div className="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/80 rounded-2xl rounded-tl-none px-4 py-3.5 text-sm flex items-center space-x-1.5 shadow-sm">
+                  <div className="w-1.5 h-1.5 bg-neutral-450 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-1.5 h-1.5 bg-neutral-450 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-1.5 h-1.5 bg-neutral-450 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             )}
@@ -114,26 +129,28 @@ export function ChatWindow({
         )}
       </div>
 
-      {/* Message input bar */}
-      <div className="p-4 bg-white dark:bg-neutral-900 lg:bg-transparent border-t lg:border-t-0 border-neutral-200 dark:border-neutral-850 flex-shrink-0">
-        <form onSubmit={handleSend} className="max-w-3xl mx-auto flex items-center gap-2">
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            disabled={sending || loading}
-            className="flex-1 px-4 py-2.5 text-sm bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-md text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-650 focus:border-transparent transition-all disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || sending || loading}
-            className="p-2.5 rounded-md text-white bg-neutral-900 hover:bg-neutral-800 dark:text-neutral-900 dark:bg-neutral-100 dark:hover:bg-neutral-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600"
-            aria-label="Send message"
-          >
-            <Send className="h-4 w-4" />
-          </button>
+      {/* Message Input Area (Floating card look with gradient fade) */}
+      <div className="px-4 pb-6 pt-2 bg-gradient-to-t from-neutral-50 via-neutral-50/95 to-transparent dark:from-neutral-950 dark:via-neutral-950/95 dark:to-transparent flex-shrink-0">
+        <form onSubmit={handleSend} className="max-w-3xl mx-auto">
+          <div className="relative flex items-center w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm hover:border-neutral-300 dark:hover:border-neutral-700 focus-within:ring-4 focus-within:ring-indigo-500/10 focus-within:border-indigo-500 dark:focus-within:border-indigo-500/80 transition-all duration-200 pr-1.5 pl-3.5 py-1.5">
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+              disabled={sending || loading}
+              className="flex-1 min-w-0 bg-transparent py-2.5 text-sm text-neutral-850 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-550 focus:outline-none disabled:opacity-50"
+            />
+            <button
+              type="submit"
+              disabled={!input.trim() || sending || loading}
+              className="p-2.5 rounded-xl text-white bg-indigo-600 hover:bg-indigo-550 dark:bg-indigo-600 dark:hover:bg-indigo-500 shadow-md shadow-indigo-600/10 dark:shadow-none hover:shadow-lg transition-all duration-150 disabled:opacity-15 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none focus:ring-2 focus:ring-indigo-500/35 flex-shrink-0"
+              aria-label="Send message"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
         </form>
       </div>
 
