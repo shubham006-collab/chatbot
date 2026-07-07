@@ -45,7 +45,7 @@ export function ChatSidebar({
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 w-66 border-r border-neutral-200/80 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex flex-col z-45 transform lg:transform-none lg:static transition-transform duration-200 ease-in-out ${
+        className={`fixed inset-y-0 left-0 w-64 border-r border-neutral-200/80 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex flex-col z-50 transform lg:transform-none lg:static transition-transform duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
