@@ -1,0 +1,6 @@
+supabase
+pyjwt
+bcrypt
+google-generativeai
+groq
+python-dotenv
