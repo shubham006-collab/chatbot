@@ -6,7 +6,7 @@ import os
 from urllib.parse import urlparse, parse_qs
 
 # Adjust import path to find the _lib directory
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from _lib.db import supabase
 from _lib.auth_utils import authenticate_request
 
