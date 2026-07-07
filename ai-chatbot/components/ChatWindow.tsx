@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Menu, Bot } from 'lucide-react';
 import { MessageBubble } from './MessageBubble';
+import { ThemeToggle } from './theme-toggle';
 
 type Message = {
   id?: string;
@@ -57,17 +58,20 @@ export function ChatWindow({
     <div className="flex-1 flex flex-col h-full bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden transition-colors duration-200">
       
       {/* Mobile Header */}
-      <header className="flex items-center px-4 h-14 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 lg:hidden z-10 flex-shrink-0">
-        <button
-          onClick={onMenuClick}
-          className="p-1.5 rounded text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors mr-2"
-          aria-label="Open Sidebar"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-        <span className="font-medium text-sm text-neutral-800 dark:text-neutral-200">
-          Chat Session
-        </span>
+      <header className="flex items-center justify-between px-4 h-14 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 lg:hidden z-10 flex-shrink-0">
+        <div className="flex items-center">
+          <button
+            onClick={onMenuClick}
+            className="p-1.5 rounded text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors mr-2"
+            aria-label="Open Sidebar"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <span className="font-medium text-sm text-neutral-800 dark:text-neutral-200">
+            Chat Session
+          </span>
+        </div>
+        <ThemeToggle variant="inline" />
       </header>
 
       {/* Message thread container */}

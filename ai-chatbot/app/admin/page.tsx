@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { Trash2, UserPlus, ArrowLeft, Shield, Check, X } from 'lucide-react';
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 type UserListEntry = {
   id: string;
@@ -135,14 +136,15 @@ export default function AdminPage() {
 
   if (authLoading || !user || !user.is_admin) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 text-sm text-neutral-500 font-medium">
+      <div className="h-full w-full flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 text-sm text-neutral-500 font-medium">
         Loading...
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-200 py-8 px-4 sm:px-6 lg:px-8">
+    <main className="h-full w-full overflow-y-auto bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-200 py-8 px-4 sm:px-6 lg:px-8">
+      <ThemeToggle variant="fixed" />
       <div className="max-w-6xl mx-auto space-y-6">
         
         {/* Header navigation bar */}

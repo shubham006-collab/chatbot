@@ -4,6 +4,7 @@ import React from 'react';
 import { Plus, Trash2, X, MessageSquare, LogOut, Shield } from 'lucide-react';
 import { useAuth } from './auth-provider';
 import Link from 'next/link';
+import { ThemeToggle } from './theme-toggle';
 
 type Chat = {
   id: string;
@@ -122,7 +123,7 @@ export function ChatSidebar({
         {/* User profile footer */}
         {user && (
           <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3 bg-neutral-50/30 dark:bg-neutral-900/30">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200 truncate">
                   {user.username}
@@ -133,6 +134,7 @@ export function ChatSidebar({
                   </span>
                 )}
               </div>
+              <ThemeToggle variant="inline" />
             </div>
             
             <div className="flex flex-col gap-1.5">

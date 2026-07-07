@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthProvider } from "@/components/auth-provider";
 
 const geistSans = localFont({
@@ -47,7 +46,6 @@ export default function RootLayout({
       <body className="antialiased">
         <AuthProvider>
           <ThemeProvider>
-            <ThemeToggle />
             {children}
           </ThemeProvider>
         </AuthProvider>

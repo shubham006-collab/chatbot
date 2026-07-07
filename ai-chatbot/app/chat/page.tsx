@@ -174,7 +174,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-screen w-screen flex overflow-hidden bg-white dark:bg-neutral-900 transition-colors duration-200">
+    <div className="h-[100dvh] w-full flex overflow-hidden bg-white dark:bg-neutral-900 transition-colors duration-200">
       <ChatSidebar
         chats={chats}
         selectedChatId={selectedChatId}
