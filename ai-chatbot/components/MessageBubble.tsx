@@ -50,10 +50,10 @@ export function MessageBubble({ message }: { message: Message }) {
       
       {/* Avatar Circle */}
       <div 
-        className={`h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm border select-none ${
+        className={`h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm select-none transition-all ${
           isUser 
-            ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-750' 
-            : 'bg-gradient-to-tr from-indigo-500 to-violet-500 text-white border-transparent'
+            ? 'bg-white/40 dark:bg-neutral-800/30 text-neutral-600 dark:text-neutral-300 border border-white/20 dark:border-neutral-750/30 glass-border' 
+            : 'bg-gradient-to-tr from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-500/10'
         }`}
       >
         {isUser ? <User className="h-4.5 w-4.5" /> : <Bot className="h-4.5 w-4.5" />}
@@ -64,10 +64,10 @@ export function MessageBubble({ message }: { message: Message }) {
         
         {/* Actual bubble */}
         <div
-          className={`px-4 py-3 text-[14px] leading-relaxed shadow-sm transition-all ${
+          className={`px-4 py-3 text-[14px] leading-relaxed transition-all ${
             isUser
-              ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-2xl rounded-tr-none font-normal'
-              : 'bg-white text-neutral-850 dark:bg-neutral-900 dark:text-neutral-200 border border-neutral-200/70 dark:border-neutral-800/80 rounded-2xl rounded-tl-none'
+              ? 'bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-2xl rounded-tr-none font-normal shadow-md shadow-indigo-600/10 dark:shadow-none'
+              : 'bg-white/60 dark:bg-neutral-900/45 text-neutral-850 dark:text-neutral-200 border border-white/25 dark:border-neutral-800/45 rounded-2xl rounded-tl-none shadow-sm backdrop-blur-md glass-border'
           }`}
         >
           <div className="prose prose-sm dark:prose-invert max-w-none break-words">

@@ -45,12 +45,12 @@ export function ChatSidebar({
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 w-64 border-r border-neutral-200/80 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex flex-col z-50 transform lg:transform-none lg:static transition-transform duration-200 ease-in-out ${
+        className={`fixed inset-y-0 left-0 w-64 border-r border-neutral-200/40 dark:border-neutral-800/40 bg-neutral-50/50 dark:bg-neutral-900/40 backdrop-blur-xl flex flex-col z-50 transform lg:transform-none lg:static transition-all duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+        <div className="p-4 border-b border-neutral-200/40 dark:border-neutral-800/40 flex items-center justify-between">
           <span className="font-semibold text-[10px] uppercase tracking-wider text-neutral-400 dark:text-neutral-500 font-mono select-none">
             Chat History
           </span>
@@ -68,9 +68,9 @@ export function ChatSidebar({
           <button
             onClick={() => {
               onNewChat();
-              onClose();
+               onClose();
             }}
-            className="w-full py-2.5 px-4 flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm font-semibold bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-250 shadow-sm hover:bg-neutral-50 dark:hover:bg-neutral-850 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-150 active:scale-[0.98]"
+            className="w-full py-2.5 px-4 flex items-center justify-center gap-2 rounded-xl text-sm font-semibold text-neutral-800 dark:text-neutral-200 shadow-sm transition-all duration-150 active:scale-[0.98] liquid-glass liquid-glass-hover"
           >
             <Plus className="h-4 w-4 text-indigo-500" />
             New Conversation
@@ -91,8 +91,8 @@ export function ChatSidebar({
                   key={chat.id}
                   className={`group flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all duration-150 text-sm ${
                     isSelected
-                      ? 'bg-white text-neutral-900 dark:bg-neutral-800/80 dark:text-neutral-100 font-semibold shadow-sm border border-neutral-200 dark:border-neutral-750'
-                      : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/50 dark:hover:bg-neutral-800/30 hover:text-neutral-900 dark:hover:text-neutral-250 border border-transparent'
+                      ? 'bg-white/60 dark:bg-neutral-800/40 text-neutral-900 dark:text-neutral-100 font-semibold shadow-sm border border-neutral-200/40 dark:border-neutral-750/30 backdrop-blur-md glass-border'
+                      : 'text-neutral-600 dark:text-neutral-450 hover:bg-white/40 dark:hover:bg-neutral-800/25 hover:text-neutral-900 dark:hover:text-neutral-200 border border-transparent'
                   }`}
                 >
                   <div
@@ -125,7 +125,7 @@ export function ChatSidebar({
 
         {/* User profile footer */}
         {user && (
-          <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3 bg-neutral-100/50 dark:bg-neutral-900/50 flex-shrink-0">
+          <div className="p-4 border-t border-neutral-200/40 dark:border-neutral-800/40 space-y-3 bg-neutral-100/30 dark:bg-neutral-900/20 backdrop-blur-md flex-shrink-0">
             
             {/* User credentials details */}
             <div className="flex items-center justify-between gap-2">
@@ -147,18 +147,18 @@ export function ChatSidebar({
             </div>
             
             {/* Quick Actions */}
-            <div className="flex flex-col gap-2 pt-1 border-t border-neutral-200/60 dark:border-neutral-805/60">
+            <div className="flex flex-col gap-2 pt-1 border-t border-neutral-200/40 dark:border-neutral-800/40">
               {user.is_admin && (
                 <Link
                   href="/admin"
-                  className="w-full text-center py-2 px-3 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-850 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 shadow-sm transition-all duration-150 active:scale-[0.98]"
+                  className="w-full text-center py-2 px-3 border border-neutral-200/50 dark:border-neutral-800/50 bg-white/50 dark:bg-neutral-900/40 hover:bg-white/70 dark:hover:bg-neutral-800/60 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-350 shadow-sm backdrop-blur-md transition-all duration-150 active:scale-[0.98] glass-border"
                 >
                   Admin Portal
                 </Link>
               )}
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-55 dark:hover:bg-red-950/20 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:border-red-200 dark:hover:border-red-900/30 shadow-sm transition-all duration-150 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-red-650 dark:text-red-400 hover:bg-red-50/50 dark:hover:bg-red-950/20 border border-neutral-200/50 dark:border-neutral-800/50 bg-white/50 dark:bg-neutral-900/40 hover:border-red-300/50 dark:hover:border-red-900/30 shadow-sm backdrop-blur-md transition-all duration-150 active:scale-[0.98] glass-border"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 Sign Out

@@ -174,24 +174,33 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-[100dvh] w-full flex overflow-hidden bg-white dark:bg-neutral-900 transition-colors duration-200">
-      <ChatSidebar
-        chats={chats}
-        selectedChatId={selectedChatId}
-        onSelectChat={setSelectedChatId}
-        onDeleteChat={handleDeleteChat}
-        onNewChat={handleNewChat}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-      <ChatWindow
-        chatId={selectedChatId}
-        messages={messages}
-        onSendMessage={handleSendMessage}
-        loading={messagesLoading}
-        sending={sending}
-        onMenuClick={() => setSidebarOpen(true)}
-      />
+    <div className="h-[100dvh] w-full flex overflow-hidden bg-neutral-50 dark:bg-neutral-950 transition-colors duration-250 relative">
+      {/* Background Liquid Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-indigo-500/15 to-purple-500/15 dark:from-indigo-650/10 dark:to-purple-650/10 blur-[130px] animate-float-slow" />
+        <div className="absolute bottom-[-10%] right-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-rose-500/10 to-orange-500/10 dark:from-rose-650/8 dark:to-orange-650/8 blur-[130px] animate-float-slower" />
+        <div className="absolute top-[35%] left-[45%] translate-x-[-50%] translate-y-[-50%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-sky-400/10 to-violet-400/10 dark:from-sky-600/8 dark:to-violet-600/8 blur-[120px] animate-float-slow" style={{ animationDelay: '-6s' }} />
+      </div>
+
+      <div className="relative z-10 flex h-full w-full overflow-hidden">
+        <ChatSidebar
+          chats={chats}
+          selectedChatId={selectedChatId}
+          onSelectChat={setSelectedChatId}
+          onDeleteChat={handleDeleteChat}
+          onNewChat={handleNewChat}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+        <ChatWindow
+          chatId={selectedChatId}
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          loading={messagesLoading}
+          sending={sending}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
+      </div>
     </div>
   );
 }

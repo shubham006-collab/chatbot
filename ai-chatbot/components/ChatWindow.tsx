@@ -55,10 +55,10 @@ export function ChatWindow({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden transition-colors duration-200">
+    <div className="flex-1 flex flex-col h-full bg-transparent relative overflow-hidden transition-colors duration-200">
       
       {/* Sticky Premium Header (both Desktop & Mobile) */}
-      <header className="flex items-center justify-between px-6 h-14 border-b border-neutral-200/80 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md sticky top-0 z-10 flex-shrink-0 select-none">
+      <header className="flex items-center justify-between px-6 h-14 border-b border-neutral-205/30 dark:border-neutral-805/30 bg-white/30 dark:bg-neutral-950/20 backdrop-blur-xl sticky top-0 z-10 flex-shrink-0 select-none glass-border">
         <div className="flex items-center gap-2">
           <button
             onClick={onMenuClick}
@@ -130,9 +130,9 @@ export function ChatWindow({
       </div>
 
       {/* Message Input Area (Floating card look with gradient fade) */}
-      <div className="px-4 pb-6 pt-2 bg-gradient-to-t from-neutral-50 via-neutral-50/95 to-transparent dark:from-neutral-950 dark:via-neutral-950/95 dark:to-transparent flex-shrink-0">
+      <div className="px-4 pb-6 pt-2 bg-gradient-to-t from-neutral-50/40 via-neutral-50/10 to-transparent dark:from-neutral-950/40 dark:via-neutral-950/10 dark:to-transparent flex-shrink-0">
         <form onSubmit={handleSend} className="max-w-3xl mx-auto">
-          <div className="relative flex items-center w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm hover:border-neutral-300 dark:hover:border-neutral-700 focus-within:ring-4 focus-within:ring-indigo-500/10 focus-within:border-indigo-500 dark:focus-within:border-indigo-500/80 transition-all duration-200 pr-1.5 pl-3.5 py-1.5">
+          <div className="relative flex items-center w-full liquid-glass liquid-glass-hover rounded-2xl pr-1.5 pl-3.5 py-1.5">
             <input
               ref={inputRef}
               type="text"
