@@ -49,13 +49,20 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="h-full w-full overflow-hidden flex bg-neutral-50 dark:bg-neutral-950 transition-colors duration-200">
+    <main className="h-screen w-screen overflow-hidden flex bg-neutral-50 dark:bg-neutral-950 transition-colors duration-250 relative">
       <ThemeToggle variant="fixed" />
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 h-full w-full">
+      {/* Background Liquid Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-indigo-500/15 to-purple-500/15 dark:from-indigo-650/10 dark:to-purple-650/10 blur-[130px] animate-float-slow" />
+        <div className="absolute bottom-[-10%] right-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-rose-500/10 to-orange-500/10 dark:from-rose-650/8 dark:to-orange-650/8 blur-[130px] animate-float-slower" />
+        <div className="absolute top-[35%] left-[45%] translate-x-[-50%] translate-y-[-50%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-sky-400/10 to-violet-400/10 dark:from-sky-600/8 dark:to-violet-600/8 blur-[120px] animate-float-slow" style={{ animationDelay: '-6s' }} />
+      </div>
+
+      <div className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-2 h-full w-full">
         
         {/* Left Side: Branding & Features Pane (Desktop/Tablet large only) */}
-        <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-neutral-950 via-slate-900 to-indigo-950 relative overflow-hidden text-white border-r border-neutral-850/20">
+        <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-neutral-950/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-xl relative overflow-hidden text-white border-r border-white/5 dark:border-neutral-850/20">
           
           {/* Subtle Ambient Glow Effects */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
@@ -77,7 +84,7 @@ export default function LoginPage() {
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-300">
                 <Sparkles className="h-3.5 w-3.5" /> Next-gen AI Interface
               </div>
-              <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-neutral-100 to-neutral-450 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-neutral-100 to-neutral-300 bg-clip-text text-transparent">
                 Empower your workflow with intelligent conversations.
               </h1>
               <p className="text-neutral-450 text-base leading-relaxed">
@@ -119,18 +126,18 @@ export default function LoginPage() {
           </div>
 
           {/* Footer Text */}
-          <div className="text-neutral-550 text-xs font-medium relative z-10">
+          <div className="text-neutral-500 text-xs font-medium relative z-10">
             &copy; 2026 Chatbot System Inc. All rights reserved.
           </div>
         </div>
 
         {/* Right Side: Authentication Form Pane */}
-        <div className="flex flex-col justify-center items-center px-6 py-12 bg-white dark:bg-neutral-950 transition-colors duration-200 relative">
+        <div className="flex flex-col justify-center items-center px-6 py-12 bg-transparent transition-colors duration-250 relative overflow-hidden flex-grow">
           
           {/* Ambient Glow for Mobile Background */}
           <div className="lg:hidden absolute top-10 right-10 w-64 h-64 rounded-full bg-indigo-500/5 blur-[80px] pointer-events-none" />
           
-          <div className="w-full max-w-md space-y-8 relative z-10">
+          <div className="w-full max-w-md space-y-8 relative z-10 p-8 md:p-10 rounded-3xl border border-white/25 dark:border-neutral-800/60 bg-white/40 dark:bg-neutral-900/35 backdrop-blur-xl shadow-2xl shadow-indigo-600/5 dark:shadow-none liquid-glass">
             
             {/* Mobile Header Logo */}
             <div className="lg:hidden flex flex-col items-center space-y-4 mb-4 text-center">
@@ -139,7 +146,7 @@ export default function LoginPage() {
               </div>
               <div className="space-y-1">
                 <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-                  Chatbot <span className="text-indigo-650 dark:text-indigo-400">2.0</span>
+                  Chatbot <span className="text-indigo-600 dark:text-indigo-450">2.0</span>
                 </h1>
                 <p className="text-xs text-neutral-500 dark:text-neutral-450">
                   Experience the next generation of conversation.
@@ -149,17 +156,17 @@ export default function LoginPage() {
 
             {/* Form Title & Subtext (Desktop View) */}
             <div className="hidden lg:block space-y-2">
-              <h2 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50">
+              <h2 className="text-2xl font-extrabold tracking-tight text-neutral-800 dark:text-neutral-100">
                 Welcome Back
               </h2>
-              <p className="text-sm text-neutral-500 dark:text-neutral-450">
+              <p className="text-xs text-neutral-500 dark:text-neutral-450">
                 Sign in with your credentials to resume your conversations.
               </p>
             </div>
 
             {/* Error Banner */}
             {error && (
-              <div className="p-4 text-sm text-red-650 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border border-red-200/60 dark:border-red-900/35 rounded-xl">
+              <div className="p-4 text-sm text-red-650 dark:text-red-450 bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-900/35 rounded-2xl backdrop-blur-md">
                 <div className="flex gap-2">
                   <span className="font-semibold">Sign in failed:</span>
                   <span>{error}</span>
@@ -168,11 +175,11 @@ export default function LoginPage() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-1.5">
                 <label 
                   htmlFor="username" 
-                  className="text-xs font-semibold uppercase tracking-wider text-neutral-550 dark:text-neutral-400"
+                  className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 ml-1 select-none"
                 >
                   Username
                 </label>
@@ -185,7 +192,7 @@ export default function LoginPage() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="admin"
                     disabled={loading}
-                    className="w-full px-4 py-3 text-sm bg-neutral-50/50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 dark:focus:border-indigo-500/80 transition-all duration-200"
+                    className="w-full px-4 py-3 text-sm bg-white/35 dark:bg-neutral-900/35 border border-white/20 dark:border-neutral-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-550 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-550 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.06)] hover:bg-white/45 dark:hover:bg-neutral-900/45 focus:translate-y-[-0.5px]"
                   />
                 </div>
               </div>
@@ -193,7 +200,7 @@ export default function LoginPage() {
               <div className="space-y-1.5">
                 <label 
                   htmlFor="password" 
-                  className="text-xs font-semibold uppercase tracking-wider text-neutral-550 dark:text-neutral-400"
+                  className="text-[10px] font-bold uppercase tracking-wider text-neutral-550 dark:text-neutral-450 ml-1 select-none"
                 >
                   Password
                 </label>
@@ -206,7 +213,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     disabled={loading}
-                    className="w-full px-4 py-3 text-sm bg-neutral-50/50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 dark:focus:border-indigo-500/80 transition-all duration-200"
+                    className="w-full px-4 py-3 text-sm bg-white/35 dark:bg-neutral-900/35 border border-white/20 dark:border-neutral-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-550 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-555 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.06)] hover:bg-white/45 dark:hover:bg-neutral-900/45 focus:translate-y-[-0.5px]"
                   />
                 </div>
               </div>
@@ -214,7 +221,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 px-4 text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-550 dark:bg-indigo-600 dark:hover:bg-indigo-500 shadow-md shadow-indigo-600/15 dark:shadow-none hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3.5 px-4 text-sm font-bold rounded-2xl text-white bg-indigo-600 hover:bg-indigo-550 dark:bg-indigo-650 dark:hover:bg-indigo-550 shadow-md shadow-indigo-600/15 dark:shadow-none hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.99]"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTheme } from './theme-provider';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Sunset } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type ThemeToggleProps = {
@@ -11,7 +11,7 @@ type ThemeToggleProps = {
 };
 
 export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch by waiting for client-side mount
@@ -20,11 +20,11 @@ export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) 
   }, []);
 
   if (!mounted) {
-    // Return a visually stable skeleton button during hydration
+    // Visually stable skeleton
     return (
       <div 
         className={cn(
-          "w-9 h-9 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 opacity-50",
+          "h-10 w-[130px] rounded-full border border-white/20 dark:border-neutral-800 bg-white/20 dark:bg-neutral-900/20 backdrop-blur-md opacity-50",
           variant === 'fixed' ? 'fixed top-4 right-4 z-50' : 'inline-block',
           className
         )}
@@ -32,21 +32,50 @@ export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) 
     );
   }
 
-  const baseClasses = variant === 'fixed'
-    ? "fixed top-4 right-4 p-2 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors z-50 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
-    : "p-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 flex-shrink-0 flex items-center justify-center";
+  const options = [
+    { value: 'light', icon: Sun, label: 'Light' },
+    { value: 'dark', icon: Moon, label: 'Dark' },
+    { value: 'system', icon: Sunset, label: 'System' }
+  ] as const;
 
   return (
-    <button
-      onClick={toggleTheme}
-      className={cn(baseClasses, className)}
-      aria-label="Toggle Theme"
-    >
-      {theme === 'dark' ? (
-        <Sun className="h-5 w-5 text-amber-400" />
-      ) : (
-        <Moon className="h-5 w-5 text-indigo-600" />
+    <div 
+      className={cn(
+        "relative flex items-center p-1 rounded-full border border-neutral-200/50 dark:border-neutral-800 bg-white/45 dark:bg-neutral-950/40 backdrop-blur-xl transition-all duration-300 select-none shadow-sm z-50",
+        variant === 'fixed' ? 'fixed top-4 right-4' : 'inline-flex',
+        className
       )}
-    </button>
+      style={{ height: '38px', width: '124px' }}
+    >
+      {/* Sliding Glass Background Indicator */}
+      <div 
+        className="absolute top-1 bottom-1 rounded-full bg-white/80 dark:bg-neutral-800/80 border border-white/40 dark:border-neutral-700/30 shadow-md backdrop-blur-md transition-all duration-300 ease-out z-0"
+        style={{
+          width: '36px',
+          left: theme === 'light' ? '4px' : theme === 'dark' ? '43px' : '82px',
+        }}
+      />
+
+      {options.map((opt) => {
+        const Icon = opt.icon;
+        const isActive = theme === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setTheme(opt.value)}
+            className={cn(
+              "relative z-10 flex items-center justify-center h-7 w-9 rounded-full transition-colors duration-250 focus:outline-none",
+              isActive 
+                ? "text-neutral-900 dark:text-neutral-50" 
+                : "text-neutral-450 hover:text-neutral-850 dark:text-neutral-500 dark:hover:text-neutral-200"
+            )}
+            aria-label={`Switch to ${opt.label} Theme`}
+          >
+            <Icon className="h-4 w-4" />
+          </button>
+        );
+      })}
+    </div>
   );
 }
