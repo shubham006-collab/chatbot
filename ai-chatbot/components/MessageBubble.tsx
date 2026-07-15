@@ -560,7 +560,7 @@ export function MessageBubble({ message }: { message: Message }) {
         <div
           className={`px-4 py-3 text-[14px] leading-relaxed transition-all w-full ${
             isUser
-              ? 'bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-2xl rounded-tr-none font-normal shadow-md shadow-indigo-600/10 dark:shadow-none'
+              ? 'bg-indigo-500/15 dark:bg-indigo-500/20 text-indigo-950 dark:text-indigo-100 border border-indigo-400/30 dark:border-indigo-500/30 rounded-2xl rounded-tr-none font-normal shadow-sm backdrop-blur-md shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]'
               : 'bg-white/60 dark:bg-neutral-900/45 text-neutral-850 dark:text-neutral-200 border border-white/25 dark:border-neutral-800/45 rounded-2xl rounded-tl-none shadow-sm backdrop-blur-md glass-border'
           }`}
         >

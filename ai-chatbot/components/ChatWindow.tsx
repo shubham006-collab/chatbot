@@ -132,20 +132,20 @@ export function ChatWindow({
       {/* Message Input Area (Floating card look with gradient fade) */}
       <div className="px-4 pb-6 pt-2 bg-gradient-to-t from-neutral-50/40 via-neutral-50/10 to-transparent dark:from-neutral-950/40 dark:via-neutral-950/10 dark:to-transparent flex-shrink-0">
         <form onSubmit={handleSend} className="max-w-3xl mx-auto">
-          <div className="relative flex items-center w-full liquid-glass liquid-glass-hover rounded-2xl pr-1.5 pl-3.5 py-1.5">
+          <div className="relative flex items-center w-full bg-indigo-50/30 dark:bg-neutral-950/35 border-2 border-indigo-400/80 dark:border-indigo-500/50 rounded-full pr-1.5 pl-5 py-1.5 backdrop-blur-md shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.7)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.06)] shadow-sm transition-all duration-200 focus-within:border-indigo-500 dark:focus-within:border-indigo-400">
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
+              placeholder="Type a message..."
               disabled={sending || loading}
-              className="flex-1 min-w-0 bg-transparent py-2.5 text-sm text-neutral-850 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-550 focus:outline-none disabled:opacity-50"
+              className="flex-1 min-w-0 bg-transparent py-2 text-sm text-neutral-850 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-500 focus:outline-none disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={!input.trim() || sending || loading}
-              className="p-2.5 rounded-xl text-white bg-indigo-600 hover:bg-indigo-550 dark:bg-indigo-600 dark:hover:bg-indigo-500 shadow-md shadow-indigo-600/10 dark:shadow-none hover:shadow-lg transition-all duration-150 disabled:opacity-15 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none focus:ring-2 focus:ring-indigo-500/35 flex-shrink-0"
+              className="p-2.5 rounded-full text-neutral-550 dark:text-neutral-400 bg-neutral-200/50 dark:bg-neutral-800/40 hover:bg-neutral-300/50 dark:hover:bg-neutral-700/55 shadow-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-neutral-200/20 dark:disabled:bg-neutral-800/20 flex-shrink-0 flex items-center justify-center"
               aria-label="Send message"
             >
               <Send className="h-4 w-4" />

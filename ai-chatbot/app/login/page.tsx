@@ -49,20 +49,19 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="h-screen w-screen overflow-hidden flex bg-neutral-50 dark:bg-neutral-950 transition-colors duration-250 relative">
-      <ThemeToggle variant="fixed" />
+    <main 
+      className="h-screen w-screen overflow-hidden flex bg-cover bg-center transition-colors duration-250 relative"
+      style={{ backgroundImage: "url('/welcome-bg.jpg')" }}
+    >
+      {/* Dark overlay to ensure contrast */}
+      <div className="absolute inset-0 bg-neutral-900/30 dark:bg-neutral-950/50 backdrop-blur-[2px] z-0" />
 
-      {/* Background Liquid Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-indigo-500/15 to-purple-500/15 dark:from-indigo-650/10 dark:to-purple-650/10 blur-[130px] animate-float-slow" />
-        <div className="absolute bottom-[-10%] right-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-rose-500/10 to-orange-500/10 dark:from-rose-650/8 dark:to-orange-650/8 blur-[130px] animate-float-slower" />
-        <div className="absolute top-[35%] left-[45%] translate-x-[-50%] translate-y-[-50%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-sky-400/10 to-violet-400/10 dark:from-sky-600/8 dark:to-violet-600/8 blur-[120px] animate-float-slow" style={{ animationDelay: '-6s' }} />
-      </div>
+      <ThemeToggle variant="fixed" />
 
       <div className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-2 h-full w-full">
         
         {/* Left Side: Branding & Features Pane (Desktop/Tablet large only) */}
-        <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-neutral-950/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-xl relative overflow-hidden text-white border-r border-white/5 dark:border-neutral-850/20">
+        <div className="hidden lg:flex flex-col justify-between p-12 bg-neutral-950/40 dark:bg-neutral-950/65 backdrop-blur-xl relative overflow-hidden text-white border-r border-white/10 dark:border-neutral-800/40">
           
           {/* Subtle Ambient Glow Effects */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
@@ -87,14 +86,14 @@ export default function LoginPage() {
               <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-neutral-100 to-neutral-300 bg-clip-text text-transparent">
                 Empower your workflow with intelligent conversations.
               </h1>
-              <p className="text-neutral-450 text-base leading-relaxed">
+              <p className="text-neutral-350 text-base leading-relaxed">
                 Connect, prompt, and orchestrate with our advanced dual-model framework optimized for high-performance reasoning.
               </p>
             </div>
 
-            <div className="space-y-4 pt-4 border-t border-neutral-800/60">
+            <div className="space-y-4 pt-4 border-t border-neutral-800/40">
               <div className="flex items-start gap-3">
-                <div className="p-1 rounded bg-neutral-800/50 border border-neutral-700/50 mt-1">
+                <div className="p-1 rounded bg-neutral-800/40 border border-neutral-700/40 mt-1">
                   <Zap className="h-4 w-4 text-indigo-400" />
                 </div>
                 <div>
@@ -104,7 +103,7 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="p-1 rounded bg-neutral-800/50 border border-neutral-700/50 mt-1">
+                <div className="p-1 rounded bg-neutral-800/40 border border-neutral-700/40 mt-1">
                   <Cpu className="h-4 w-4 text-indigo-400" />
                 </div>
                 <div>
@@ -114,7 +113,7 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="p-1 rounded bg-neutral-800/50 border border-neutral-700/50 mt-1">
+                <div className="p-1 rounded bg-neutral-800/40 border border-neutral-700/40 mt-1">
                   <Shield className="h-4 w-4 text-indigo-400" />
                 </div>
                 <div>
@@ -126,7 +125,7 @@ export default function LoginPage() {
           </div>
 
           {/* Footer Text */}
-          <div className="text-neutral-500 text-xs font-medium relative z-10">
+          <div className="text-neutral-450 text-xs font-medium relative z-10">
             &copy; 2026 Chatbot System Inc. All rights reserved.
           </div>
         </div>
