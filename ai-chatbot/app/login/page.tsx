@@ -179,7 +179,7 @@ export default function LoginPage() {
               <div className="space-y-1.5">
                 <label 
                   htmlFor="username" 
-                  className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 ml-1 select-none"
+                  className="text-[10px] font-bold uppercase tracking-wider text-neutral-550 dark:text-neutral-400 ml-1 select-none"
                 >
                   Username
                 </label>
@@ -192,7 +192,7 @@ export default function LoginPage() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="admin"
                     disabled={loading}
-                    className="w-full px-4 py-3 text-sm bg-white/35 dark:bg-neutral-900/35 border border-white/20 dark:border-neutral-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-550 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-550 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.06)] hover:bg-white/45 dark:hover:bg-neutral-900/45 focus:translate-y-[-0.5px]"
+                    className="w-full px-4 py-3 text-sm bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.08)] shadow-sm hover:bg-indigo-50/70 dark:hover:bg-indigo-950/30 hover:border-indigo-300 dark:hover:border-indigo-750/70 focus:translate-y-[-0.5px]"
                   />
                 </div>
               </div>
@@ -213,7 +213,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     disabled={loading}
-                    className="w-full px-4 py-3 text-sm bg-white/35 dark:bg-neutral-900/35 border border-white/20 dark:border-neutral-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-550 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-555 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.06)] hover:bg-white/45 dark:hover:bg-neutral-900/45 focus:translate-y-[-0.5px]"
+                    className="w-full px-4 py-3 text-sm bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800/80 rounded-2xl text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 dark:focus:border-indigo-500/80 transition-all duration-200 backdrop-blur-md shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.08)] shadow-sm hover:bg-indigo-50/70 dark:hover:bg-indigo-950/30 hover:border-indigo-300 dark:hover:border-indigo-750/70 focus:translate-y-[-0.5px]"
                   />
                 </div>
               </div>

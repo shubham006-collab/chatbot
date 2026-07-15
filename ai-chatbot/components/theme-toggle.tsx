@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTheme } from './theme-provider';
-import { Sun, Moon, Sunset } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type ThemeToggleProps = {
@@ -24,7 +24,7 @@ export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) 
     return (
       <div 
         className={cn(
-          "h-10 w-[130px] rounded-full border border-white/20 dark:border-neutral-800 bg-white/20 dark:bg-neutral-900/20 backdrop-blur-md opacity-50",
+          "h-10 w-[88px] rounded-full border border-white/20 dark:border-neutral-800 bg-white/20 dark:bg-neutral-900/20 backdrop-blur-md opacity-50",
           variant === 'fixed' ? 'fixed top-4 right-4 z-50' : 'inline-block',
           className
         )}
@@ -34,8 +34,7 @@ export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) 
 
   const options = [
     { value: 'light', icon: Sun, label: 'Light' },
-    { value: 'dark', icon: Moon, label: 'Dark' },
-    { value: 'system', icon: Sunset, label: 'System' }
+    { value: 'dark', icon: Moon, label: 'Dark' }
   ] as const;
 
   return (
@@ -45,14 +44,14 @@ export function ThemeToggle({ variant = 'fixed', className }: ThemeToggleProps) 
         variant === 'fixed' ? 'fixed top-4 right-4' : 'inline-flex',
         className
       )}
-      style={{ height: '38px', width: '124px' }}
+      style={{ height: '38px', width: '84px' }}
     >
       {/* Sliding Glass Background Indicator */}
       <div 
         className="absolute top-1 bottom-1 rounded-full bg-white/80 dark:bg-neutral-800/80 border border-white/40 dark:border-neutral-700/30 shadow-md backdrop-blur-md transition-all duration-300 ease-out z-0"
         style={{
           width: '36px',
-          left: theme === 'light' ? '4px' : theme === 'dark' ? '43px' : '82px',
+          left: theme === 'light' ? '4px' : '42px',
         }}
       />
 
