@@ -28,14 +28,21 @@ def get_ai_response(messages: list) -> tuple[str, str]:
         
         # Convert OpenAI-style messages to Gemini history structure
         contents = []
-        system_instruction = None
+        base_system_instruction = (
+            "You are a helpful assistant.\n"
+            "Rules:\n"
+            "1. When the user asks for a table, you MUST give the answer in table format ONLY (using standard markdown tables, e.g., | Column 1 | Column 2 |) and some explanation.\n"
+            "2. When the user asks for a diagram, you MUST provide it in diagram format (using ASCII art inside a code block with language 'ascii' or 'diagram').\n"
+            "3. Ensure table rows are correctly formatted with newlines separating each row."
+        )
+        system_instruction = base_system_instruction
         
         for msg in messages:
             role = msg.get("role")
             content = msg.get("content", "")
             
             if role == "system":
-                system_instruction = content
+                system_instruction = f"{base_system_instruction}\n\nAdditional instructions:\n{content}"
             elif role in ("assistant", "model"):
                 contents.append({
                     "role": "model",
@@ -73,9 +80,16 @@ def get_ai_response(messages: list) -> tuple[str, str]:
             
             # Map roles to standard Groq-compatible roles
             groq_messages = []
+            if system_instruction:
+                groq_messages.append({
+                    "role": "system",
+                    "content": system_instruction
+                })
             for msg in messages:
                 role = msg.get("role")
                 content = msg.get("content", "")
+                if role == "system":
+                    continue
                 if role == "model":
                     role = "assistant"
                 groq_messages.append({

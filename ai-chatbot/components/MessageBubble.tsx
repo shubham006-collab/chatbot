@@ -129,11 +129,135 @@ function parseChartData(code: string, lang: string) {
   return null;
 }
 
+// Table data structure
+interface ParsedTable {
+  headers: string[];
+  rows: string[][];
+  alignments: ('left' | 'center' | 'right')[];
+}
+
+// Normalizes missing newlines in flattened Markdown tables
+function normalizeTableNewlines(content: string): string {
+  return content
+    .replace(/\|\s*\|\s*/g, '|\n| ')
+    .replace(/\|\s*\n\s*\|/g, '|\n|');
+}
+
+// Custom parser to map raw text table lines into headers and rows
+function parseMarkdownTable(tableText: string): ParsedTable | null {
+  const lines = tableText.split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length < 2) return null;
+
+  const getCols = (line: string) => {
+    const clean = line.replace(/^\|/, '').replace(/\|$/, '');
+    return clean.split('|').map(c => c.trim());
+  };
+
+  const headers = getCols(lines[0]);
+  const alignLine = getCols(lines[1]);
+  const alignments = alignLine.map(col => {
+    if (col.startsWith(':') && col.endsWith(':')) return 'center';
+    if (col.endsWith(':')) return 'right';
+    return 'left';
+  });
+
+  const rows: string[][] = [];
+  for (let i = 2; i < lines.length; i++) {
+    const cols = getCols(lines[i]);
+    if (cols.length > 0 && (cols.length > 1 || cols[0] !== '')) {
+      while (cols.length < headers.length) cols.push('');
+      rows.push(cols.slice(0, headers.length));
+    }
+  }
+
+  if (headers.length > 0 && rows.length > 0) {
+    return { headers, rows, alignments };
+  }
+  return null;
+}
+
+// Splits the message body sequentially into text segments and structured tables
+function extractTablesAndText(content: string) {
+  const normalized = normalizeTableNewlines(content);
+  const lines = normalized.split('\n');
+  
+  const sections: { type: 'text' | 'table'; content: string; tableData?: ParsedTable }[] = [];
+  let currentTextLines: string[] = [];
+  let inTable = false;
+  let currentTableLines: string[] = [];
+
+  const flushText = () => {
+    if (currentTextLines.length > 0) {
+      sections.push({ type: 'text', content: currentTextLines.join('\n') });
+      currentTextLines = [];
+    }
+  };
+
+  const flushTable = () => {
+    if (currentTableLines.length > 0) {
+      const tableText = currentTableLines.join('\n');
+      const parsed = parseMarkdownTable(tableText);
+      if (parsed) {
+        sections.push({ type: 'table', content: tableText, tableData: parsed });
+      } else {
+        currentTextLines.push(...currentTableLines);
+      }
+      currentTableLines = [];
+    }
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const isTableRow = line.trim().startsWith('|') && line.trim().endsWith('|');
+    
+    if (isTableRow) {
+      if (!inTable) {
+        const isSeparator = line.includes('---');
+        const nextLine = lines[i + 1];
+        const nextIsSeparator = nextLine && nextLine.trim().startsWith('|') && nextLine.includes('---');
+        
+        if (isSeparator || nextIsSeparator) {
+          flushText();
+          inTable = true;
+          currentTableLines.push(line);
+        } else {
+          currentTextLines.push(line);
+        }
+      } else {
+        currentTableLines.push(line);
+      }
+    } else {
+      if (inTable) {
+        flushTable();
+        inTable = false;
+      }
+      currentTextLines.push(line);
+    }
+  }
+  
+  if (inTable) {
+    flushTable();
+  } else {
+    flushText();
+  }
+
+  return sections;
+}
+
 // Parse assistant message to extract structured components
 function parseAssistantMessage(content: string) {
   const codeBlocks: { language: string; code: string }[] = [];
   const charts: { type: 'bar' | 'line' | 'pie'; title: string; labels: string[]; values: number[] }[] = [];
   const diagrams: { content: string; language: string }[] = [];
+  const tables: ParsedTable[] = [];
+
+  // Extract structured tables first
+  const sections = extractTablesAndText(content);
+  for (const sec of sections) {
+    if (sec.type === 'table' && sec.tableData) {
+      tables.push(sec.tableData);
+    }
+  }
 
   const regex = /```(\w*)\n([\s\S]*?)\n```/g;
   let match;
@@ -158,7 +282,8 @@ function parseAssistantMessage(content: string) {
   return {
     codeBlocks,
     charts,
-    diagrams
+    diagrams,
+    tables
   };
 }
 
@@ -349,16 +474,70 @@ function ASCIIDiagramRenderer({ diagram }: { diagram: { content: string; languag
   );
 }
 
+// Premium glassmorphic Markdown table renderer
+function CustomTableRenderer({ table }: { table: ParsedTable }) {
+  return (
+    <div className="my-4 overflow-hidden rounded-xl border border-neutral-200/80 dark:border-neutral-800/90 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-md shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-left text-xs">
+          <thead className="bg-neutral-50/70 dark:bg-neutral-950/40 text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 select-none">
+            <tr>
+              {table.headers.map((header, idx) => {
+                const align = table.alignments[idx] || 'left';
+                return (
+                  <th
+                    key={idx}
+                    scope="col"
+                    className="px-4 py-3 font-semibold"
+                    style={{ textAlign: align }}
+                  >
+                    {header}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-200/60 dark:divide-neutral-800/50 text-neutral-800 dark:text-neutral-200">
+            {table.rows.map((row, rowIdx) => (
+              <tr 
+                key={rowIdx} 
+                className="hover:bg-neutral-100/30 dark:hover:bg-neutral-800/20 transition-colors"
+              >
+                {row.map((cell, cellIdx) => {
+                  const align = table.alignments[cellIdx] || 'left';
+                  return (
+                    <td
+                      key={cellIdx}
+                      className="px-4 py-3 font-normal whitespace-pre-wrap break-words"
+                      style={{ textAlign: align }}
+                    >
+                      {cell}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === 'user';
-  const [activeTab, setActiveTab] = useState<'text' | 'code' | 'charts' | 'diagrams'>('text');
+  const [activeTab, setActiveTab] = useState<'text' | 'code' | 'charts' | 'diagrams' | 'tables'>('text');
 
   // Parse structured elements for assistant messages
-  const parsed = !isUser ? parseAssistantMessage(message.content) : { codeBlocks: [], charts: [], diagrams: [] };
+  const parsed = !isUser 
+    ? parseAssistantMessage(message.content) 
+    : { codeBlocks: [], charts: [], diagrams: [], tables: [] };
+    
   const hasCode = parsed.codeBlocks.length > 0;
   const hasCharts = parsed.charts.length > 0;
   const hasDiagrams = parsed.diagrams.length > 0;
-  const showTabs = !isUser && (hasCode || hasCharts || hasDiagrams);
+  const hasTables = parsed.tables.length > 0;
+  const showTabs = !isUser && (hasCode || hasCharts || hasDiagrams || hasTables);
 
   return (
     <div className={`flex w-full items-start gap-3 mb-6 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -448,60 +627,86 @@ export function MessageBubble({ message }: { message: Message }) {
                   </span>
                 </button>
               )}
+              {hasTables && (
+                <button
+                  onClick={() => setActiveTab('tables')}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all flex items-center gap-1.5 ${
+                    activeTab === 'tables'
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50'
+                  }`}
+                >
+                  Tables
+                  <span className={`text-[9px] px-1 py-0.2 rounded font-mono font-bold ${
+                    activeTab === 'tables' ? 'bg-indigo-700 text-white' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+                  }`}>
+                    {parsed.tables.length}
+                  </span>
+                </button>
+              )}
             </div>
           )}
 
           <div className="prose prose-sm dark:prose-invert max-w-none break-words">
             {activeTab === 'text' && (
-              <ReactMarkdown
-                components={{
-                  // Prevent duplicate box wrapping by making pre transparent
-                  pre: ({ children }) => <>{children}</>,
-                  code: ({ className, children, ...props }) => {
-                    const isInline = !className;
-                    const match = /language-(\w+)/.exec(className || '');
-                    const lang = match ? match[1] : '';
-                    const codeString = String(children).replace(/\n$/, '');
+              <div className="space-y-4">
+                {extractTablesAndText(message.content).map((sec, idx) => {
+                  if (sec.type === 'table' && sec.tableData) {
+                    return <CustomTableRenderer key={idx} table={sec.tableData} />;
+                  }
 
-                    if (isInline) {
-                      return (
-                        <code
-                          className="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-mono border border-neutral-200/50 dark:border-neutral-750"
-                          {...props}
-                        >
-                          {children}
-                        </code>
-                      );
-                    }
+                  return (
+                    <ReactMarkdown
+                      key={idx}
+                      components={{
+                        pre: ({ children }) => <>{children}</>,
+                        code: ({ className, children, ...props }) => {
+                          const isInline = !className;
+                          const match = /language-(\w+)/.exec(className || '');
+                          const lang = match ? match[1] : '';
+                          const codeString = String(children).replace(/\n$/, '');
 
-                    // Render custom visual charts and diagrams inline in response tab too
-                    if (['chart', 'csv-chart', 'pie-chart', 'bar-chart', 'line-chart'].includes(lang) || (lang === 'csv' && isChartCSV(codeString))) {
-                      const parsedChart = parseChartData(codeString, lang);
-                      if (parsedChart) {
-                        return <CustomChartRenderer chart={parsedChart} />;
-                      }
-                    } else if (['ascii', 'diagram', 'ascii-art', 'flowchart'].includes(lang)) {
-                      return <ASCIIDiagramRenderer diagram={{ content: codeString, language: lang }} />;
-                    }
+                          if (isInline) {
+                            return (
+                              <code
+                                className="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-mono border border-neutral-200/50 dark:border-neutral-750"
+                                {...props}
+                              >
+                                {children}
+                              </code>
+                            );
+                          }
 
-                    return (
-                      <div className="my-3 overflow-hidden rounded-xl border border-neutral-200/80 dark:border-neutral-800/90 bg-neutral-900 dark:bg-neutral-950">
-                        <div className="flex items-center justify-between px-4 py-2 bg-neutral-100/50 dark:bg-neutral-900/50 border-b border-neutral-200/80 dark:border-neutral-800/90 text-[10px] font-semibold text-neutral-500 dark:text-neutral-400 font-mono select-none">
-                          <span>{lang ? lang.toUpperCase() : 'CODE'}</span>
-                          <CopyButton text={codeString} />
-                        </div>
-                        <pre className="p-4 overflow-x-auto text-neutral-100 text-xs font-mono bg-neutral-900 dark:bg-neutral-950">
-                          <code className="text-neutral-200" {...props}>
-                            {children}
-                          </code>
-                        </pre>
-                      </div>
-                    );
-                  },
-                }}
-              >
-                {message.content}
-              </ReactMarkdown>
+                          if (['chart', 'csv-chart', 'pie-chart', 'bar-chart', 'line-chart'].includes(lang) || (lang === 'csv' && isChartCSV(codeString))) {
+                            const parsedChart = parseChartData(codeString, lang);
+                            if (parsedChart) {
+                              return <CustomChartRenderer chart={parsedChart} />;
+                            }
+                          } else if (['ascii', 'diagram', 'ascii-art', 'flowchart'].includes(lang)) {
+                            return <ASCIIDiagramRenderer diagram={{ content: codeString, language: lang }} />;
+                          }
+
+                          return (
+                            <div className="my-3 overflow-hidden rounded-xl border border-neutral-200/80 dark:border-neutral-800/90 bg-neutral-900 dark:bg-neutral-950">
+                              <div className="flex items-center justify-between px-4 py-2 bg-neutral-100/50 dark:bg-neutral-900/50 border-b border-neutral-200/80 dark:border-neutral-800/90 text-[10px] font-semibold text-neutral-500 dark:text-neutral-400 font-mono select-none">
+                                <span>{lang ? lang.toUpperCase() : 'CODE'}</span>
+                                <CopyButton text={codeString} />
+                              </div>
+                              <pre className="p-4 overflow-x-auto text-neutral-100 text-xs font-mono bg-neutral-900 dark:bg-neutral-950">
+                                <code className="text-neutral-200" {...props}>
+                                  {children}
+                                </code>
+                              </pre>
+                            </div>
+                          );
+                        },
+                      }}
+                    >
+                      {sec.content}
+                    </ReactMarkdown>
+                  );
+                })}
+              </div>
             )}
 
             {activeTab === 'code' && (
@@ -534,6 +739,14 @@ export function MessageBubble({ message }: { message: Message }) {
               <div className="space-y-4">
                 {parsed.diagrams.map((diag, idx) => (
                   <ASCIIDiagramRenderer key={idx} diagram={diag} />
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'tables' && (
+              <div className="space-y-4">
+                {parsed.tables.map((table, idx) => (
+                  <CustomTableRenderer key={idx} table={table} />
                 ))}
               </div>
             )}
